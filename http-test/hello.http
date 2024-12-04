@@ -1,1 +1,5 @@
+### 간단한 Batch Job 실행
 GET http://localhost:8080/batch/hello
+
+### CSV 파일 읽어들이는 Batch Job 실행
+GET http://localhost:8080/batch/customer-file

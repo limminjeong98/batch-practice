@@ -18,6 +18,7 @@ public class JobLauncherController {
     private final JobLauncher jobLauncher;
     private final JobExplorer jobExplorer;
     private final Job helloJob;
+    private final Job customerFileJob;
 
     @GetMapping("/batch/hello")
     public ResponseEntity<String> runHelloJob() {
@@ -28,6 +29,22 @@ public class JobLauncherController {
         JobExecution jobExecution = null;
         try {
             jobExecution = jobLauncher.run(helloJob, jobParameters);
+            return ResponseEntity.ok("Job 실행 완료. 상태: " + jobExecution.getStatus());
+        } catch (JobExecutionException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Job 실행 실패: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/batch/customer-file")
+    public ResponseEntity<String> runCustomerFileJob() {
+        JobParameters jobParameters = new JobParametersBuilder(jobExplorer)
+                .addString("datetime", LocalDateTime.now().toString())
+                .toJobParameters();
+
+        JobExecution jobExecution = null;
+        try {
+            jobExecution = jobLauncher.run(customerFileJob, jobParameters);
             return ResponseEntity.ok("Job 실행 완료. 상태: " + jobExecution.getStatus());
         } catch (JobExecutionException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
