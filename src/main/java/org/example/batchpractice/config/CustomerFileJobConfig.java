@@ -56,6 +56,7 @@ public class CustomerFileJobConfig {
                 .writer(customerWriter())
                 .taskExecutor(taskExecutor) // 멀티스레드 설정
                 .listener(new ThreadMonitorListener(taskExecutor))
+                .listener(new StepPerformanceListener())
                 .build();
     }
 
